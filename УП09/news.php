@@ -236,12 +236,12 @@
             min-height: 250px;
         }
         .site-title-link {
-    color: white; /* Change the color to white */
-    text-decoration: none; /* Remove the underline */
+    color: white; 
+    text-decoration: none; 
 }
 
 .site-title-link:hover {
-    text-decoration: underline; /* Add underline on hover */
+    text-decoration: underline;
 }
       
     </style>

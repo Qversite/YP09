@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
     }
 
     // Перенаправление на страницу админ-панели или на ту же страницу, с которой был выполнен запрос
-    header('Location: admin_panel.php');
+    header('Location: delete_product1.php');
     exit;
 }
 ?>

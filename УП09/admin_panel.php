@@ -532,17 +532,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     
     </div>
 
-    <div class="add-button">
-    <a href="add_main.php">Перейти к добавлению</a>
-    </div><br>
+    
 
     <div class="add-button">
     <a href="delete_product1.php">Перейти к удолению продукта</a>
-    </div><br>
+    </div>
 
     <div class="add-button">
     <a href="delete_user.php">Перейти к удолению пользователю</a>
     </div><br>
+    
+    <div class="add-button">
+    <a href="add_main.php">Перейти к добавлению</a>
+    </div>
 
 
 

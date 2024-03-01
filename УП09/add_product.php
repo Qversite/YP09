@@ -24,6 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     $description = $_POST['description'];
     $price = $_POST['price'];
 
+    // Проверка наличия сообщения в сессии
+if (isset($_SESSION['message'])) {
+    // Вывод сообщения с помощью JavaScript
+    echo '<script>alert("' . htmlspecialchars($_SESSION['message']) . ' 😊");</script>';
+    
+    // Удаление сообщения из сессии после его вывода
+    unset($_SESSION['message']);
+}
     // Prepare the SQL statement to insert the product with NULL users_id
     $stmt = $conn->prepare("INSERT INTO products (image, name, description, price) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("sssd", $image, $name, $description, $price);

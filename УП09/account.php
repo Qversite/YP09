@@ -8,7 +8,6 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Ваш код для страницы account.php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -275,27 +274,50 @@ if (isset($_SESSION['user_id'])) {
                 <label for="auth-password">Пароль:</label>
                 <input type="password" id="auth-password" name="password" required>
                 <button type="submit">Войти</button>
+                
             </form>
             <div class="switch-form">
                 <button id="register-btn">Нет аккаунта? Зарегистрироваться</button>
             </div>
             
         </div>
-        <!-- Форма регистрации -->
-        <div class="account-section hidden" id="register-section">
-            
-            <h2>Регистрация</h2>
-            <form action="register.php" method="post">
-    <label for="reg-email">Email:</label>
-    <input type="email" id="reg-email" name="email" required>
-    <label for="reg-username">Имя:</label>
-    <input type="text" id="reg-username" name="username" required>
-    <label for="reg-lastname">Фамилия:</label>
-    <input type="text" id="reg-lastname" name="lastname" required>
-    <label for="reg-password">Пароль:</label>
-    <input type="password" id="reg-password" name="password" required><br>
-    <button type="submit">Зарегистрироваться</button>
-</form>
+        <script>
+        function validateForm() {
+            var firstName = document.forms["registrationForm"]["username"].value;
+            var lastName = document.forms["registrationForm"]["lastname"].value;
+            var password = document.forms["registrationForm"]["password"].value;
+
+            // Проверка пароля на минимальную длину
+            if (password.length < 8) {
+                alert("Пароль должен содержать не менее 8 символов.");
+                return false;
+            }
+
+            // Проверка имени и фамилии на заглавные буквы и отсутствие цифр
+            var namePattern = /^[A-ZА-Я][a-zа-я]*$/;
+            if (!namePattern.test(firstName) || !namePattern.test(lastName)) {
+                alert("Имя и фамилия должны начинаться с заглавной буквы и не должны содержать цифр.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="account-section hidden" id="register-section">
+        <h2>Регистрация</h2>
+        <form action="register.php" name="registrationForm" onsubmit="return validateForm()" method="post">
+            <label for="reg-email">Email:</label>
+            <input type="email" id="reg-email" name="email" required>
+            <label for="reg-username">Имя:</label>
+            <input type="text" id="reg-username" name="username" required>
+            <label for="reg-lastname">Фамилия:</label>
+            <input type="text" id="reg-lastname" name="lastname" required>
+            <label for="reg-password">Пароль:</label>
+            <input type="password" id="reg-password" name="password" required><br>
+            <button type="submit" name="go">Зарегистрироваться</button>
+        </form>
             <div class="switch-form">
                 <button id="login-btn">Уже есть аккаунт? Войти</button>
             </div>

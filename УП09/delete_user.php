@@ -35,8 +35,7 @@ if (isset($_POST['delete_user'])) {
 
     // Установка сообщения об успешном удалении
     $_SESSION['message'] = "Пользователь с ID $userId успешно удален.";
-    // Перенаправление на страницу админ-панели
-    header('Location: admin_panel.php');
+    header('Location: delete_user.php');
     exit;
 
 }
@@ -45,77 +44,8 @@ if (!isset($_SESSION['user_id'])) {
     // Если пользователь не вошел, перенаправляем на страницу входа
     header('Location: login.php');
     exit;
-}
-
-// Отображение личного кабинета пользователя
-$welcomeMessage = "Добро пожаловать, " . $_SESSION['username'] . "! Это ваш личный кабинет.";
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
-    // Получение данных из формы
-    $oldPassword = $_POST['old_password'];
-    $newPassword = $_POST['new_password'];
-    $confirmPassword = $_POST['confirm_password'];
-
-    // Проверка, совпадает ли старый пароль с текущим паролем пользователя
-    if (password_verify($oldPassword, $_SESSION['password'])) {
-        // Проверка, совпадают ли новый пароль и подтверждение пароля
-        if ($newPassword === $confirmPassword) {
-            // Хеширование нового пароля
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-
-            // Обновление пароля в базе данных
-            $stmt = $db->prepare("UPDATE users SET password = :password WHERE id = :id");
-            $stmt->execute(['password' => $hashedPassword, 'id' => $_SESSION['user_id']]);
-
-            // Обновление даты изменения пароля в базе данных
-            $stmt = $db->prepare("UPDATE users SET password_change_date = NOW() WHERE id = :id");
-            $stmt->execute(['id' => $_SESSION['user_id']]);
-
-            // Обновление пароля в сессии
-            $_SESSION['password'] = $hashedPassword;
-
-            // Установка сообщения в сессию
-            $_SESSION['message'] = "Пароль успешно изменен!";
-        } else {
-            // Установка сообщения в сессию
-            $_SESSION['message'] = "Новый пароль и подтверждение пароля не совпадают.";
-        }
-    } else {
-        // Установка сообщения в сессию
-        $_SESSION['message'] = "Старый пароль введен неверно.";
-        
-    }// Проверка, совпадает ли старый пароль с текущим паролем пользователя
-    if (password_verify($oldPassword, $_SESSION['password'])) {
-        // Проверка, совпадают ли новый пароль и подтверждение пароля
-        if ($newPassword === $confirmPassword) {
-            // Хеширование нового пароля
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-
-            // Обновление пароля в базе данных
-            $stmt = $db->prepare("UPDATE users SET password = :password WHERE id = :id");
-            $stmt->execute(['password' => $hashedPassword, 'id' => $_SESSION['user_id']]);
-
-            // Обновление даты изменения пароля в базе данных
-            $stmt = $db->prepare("UPDATE users SET password_change_date = NOW() WHERE id = :id");
-            $stmt->execute(['id' => $_SESSION['user_id']]);
-
-            // Обновление пароля в сессии
-            $_SESSION['password'] = $hashedPassword;
-
-            // Установка сообщения в сессию
-            $_SESSION['message'] = "Пароль успешно изменен!";
-        } else {
-            // Установка сообщения в сессию
-            $_SESSION['message'] = "Новый пароль и подтверждение пароля не совпадают.";
-        }
-    } else {
-        // Установка сообщения в сессию
-        $_SESSION['message'] = "Старый пароль введен неверно.";
-        
-    }
-    // Перенаправление на страницу личного кабинета
-    header('Location: account.php');
-    exit;
-}
+} 
+   
 ?>
 <style>
     .delete-user-form {
@@ -151,14 +81,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
             background-color: #c82333;
         }
         .site-title-link {
-    color: white; /* Change the color to white */
-    text-decoration: none; /* Remove the underline */
-}
+        color: white; /* Change the color to white */
+        text-decoration: none; /* Remove the underline */
+        }
 
-.site-title-link:hover {
-    text-decoration: underline; /* Add underline on hover */
-}
-.delete-product-form {
+        .site-title-link:hover {
+        text-decoration: underline; /* Add underline on hover */
+        }
+        .delete-product-form {
             margin-top: 20px;
             margin-bottom: 20px;
         }
