@@ -172,7 +172,7 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 7px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -189,6 +189,7 @@
             justify-content: center;
             align-items: center;
         }
+        
      
         .site-title-link {
     color: white; /* Change the color to white */
@@ -279,6 +280,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo '<form action="add_to_cart.php" method="post">';
     echo '<input type="hidden" name="product_id" value="' . $row['id'] . '">';
     echo '<button type="submit" class="btn btn-primary" name="add_to_cart">В корзину</button>';
+    echo '<a href="peper.php?id=' . $row['id'] . '" class="btn btn-primary">О товаре</a>';
     echo '</form>';
     echo '</div>';
     echo '</div>';

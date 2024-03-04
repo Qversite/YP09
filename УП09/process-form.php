@@ -13,16 +13,6 @@ session_write_close();
 $result = ['success' => false];
 $code = $_POST['captcha'];
 
-if (!isset($_POST['captcha']) || empty($_POST['captcha'])) {
-  $result['errors'][] = ['captcha', 'Пожалуйста, введите код капчи.'];
-} else {
-  $code = crypt(trim($code), '$1$itchief$7');
-  $result['success'] = $captcha === $code;
-  if (!$result['success']) {
-    $result['errors'][] = ['captcha', 'Введенный код не соответствует изображению!'];
-  }
-}
-
 
 echo json_encode($result);
 ?>

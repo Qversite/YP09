@@ -221,6 +221,8 @@ if (isset($_SESSION['user_id'])) {
 .product-item strong {
     color: #000;
     flex: 1;
+    text-align-last: center;
+
 }
 
 .product-item button {
