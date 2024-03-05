@@ -28,6 +28,25 @@ if (isset($_SESSION['user_id'])) {
             // Перенаправляем пользователя на страницу корзины
             header('Location: cart.php');
             exit;
+            
+// Получение данных из формы
+$quantity = $_POST['quantity'];
+$product_id = $_POST['product_id'];
+$product_price = $_POST['product_price'];
+$total_price = $quantity * $product_price;
+
+// Добавление записи в таблицу purchases
+$query = "INSERT INTO purchases (user_id, product_id, quantity, total_price) VALUES (:user_id, :product_id, :quantity, :total_price)";
+$stmt = $db->prepare($query);
+$stmt->bindParam(':user_id', $user['id']);
+$stmt->bindParam(':product_id', $product_id);
+$stmt->bindParam(':quantity', $quantity);
+$stmt->bindParam(':total_price', $total_price);
+$stmt->execute();
+
+// Отправка ответа об успешной покупке
+echo json_encode(['success' => true]);
+
         }
     }
 }
@@ -283,7 +302,30 @@ if (isset($_SESSION['user_id'])) {
 .site-title-link:hover {
     text-decoration: underline; /* Add underline on hover */
 }
+.form-group {
+        margin-bottom: 10px;
+    }
 
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input[type="number"],
+    .form-group input[type="text"] {
+        width: 50%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input[type="number"] {
+        max-width: 100px;
+    }
+
+    .form-group input[type="text"] {
+        background-color: #f8f8f8;
+    }
 
     </style>
 </head>
@@ -336,9 +378,59 @@ if (isset($_SESSION['user_id'])) {
                 <p><?php echo $product['description']; ?></p>
                 <strong>Цена: <?php echo $product['price']; ?> руб.</strong>
                 <form action="cart.php" method="post">
-                   
-                <button onclick="openModal()">Купить</button>
+                
+                <form action="cart.php" method="post">
+    <div class="form-group">
+        <label for="quantity">Количество:</label>
+        <input type="number" id="quantity" name="quantity" min="1" value="1" oninput="calculateTotal()">
+    </div>
+    <div class="form-group">
+        <label for="total">Итог к оплате:</label>
+        <input type="text" id="total" name="total" value="<?php echo $product['price']; ?>" readonly>
+    </div>
+    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+    <input type="hidden" name="product_price" value="<?php echo $product['price']; ?>">
+</form>
+                
+                
 
+                <script>
+            function calculateTotal() {
+    var quantity = document.getElementById('quantity').value;
+    var price = <?php echo $product['price']; ?>;
+    var total = quantity * price;
+    document.getElementById('total').value = total.toFixed(2) + ' руб.';
+    function buyProducts() {
+    // Отправка формы
+    document.querySelector('form').submit();
+}
+}
+
+// Вызываем функцию при загрузке страницы, чтобы установить начальную сумму
+window.onload = calculateTotal;
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Обработка ответа от сервера
+    fetch('cart.php', {
+        method: 'POST',
+        body: new FormData(this)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Показываем модальное окно
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+
+            // Обновляем историю покупок
+            document.getElementById('orderHistoryForm').submit();
+        }
+    });
+});
+</script>
+<form>
+<button onclick="openModal()">Купить</button>
 <!-- Модальное окно -->
 <div id="myModal" class="modal">
     <div class="modal-content">
@@ -361,13 +453,45 @@ if (isset($_SESSION['user_id'])) {
                 <label for="address">Адрес доставки</label>
                 <textarea class="form-control" id="address" name="address" required></textarea>
             </div>
-            <button onclick="buyProducts()">Купить</button>
+            <button id="buyButton">Купить</button>
+
+<script>
+document.getElementById('buyButton').addEventListener('click', function() {
+    buyProducts();
+});
+
+function buyProducts() {
+    // Получаем данные товара из формы или другого источника
+    var productId = '1'; // Замените на реальный ID товара
+    var quantity = '1'; // Замените на реальное количество товара
+
+    // Отправляем AJAX-запрос на сервер
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'buy_products.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // Обработка ответа сервера
+            var response = JSON.parse(this.responseText);
+            if (response.success) {
+                alert('Покупка совершена успешно!');
+                // Можно обновить интерфейс пользователя или перенаправить на страницу истории покупок
+            } else {
+                alert('Ошибка при покупке: ' + response.message);
+            }
+        }
+    };
+    xhr.send('product_id=' + productId + '&quantity=' + quantity);
+}
+</script>
 
             
         </form>
     </div>
 </div>
-
+</form>
+                 
+                  
 <script>
     // Функция для открытия модального окна
     function openModal() {
@@ -392,12 +516,14 @@ if (isset($_SESSION['user_id'])) {
 
         return true;
     }
-</script>
-
-
+            </script>
+            
                 </form>
-                <form action="remove_from_cart.php" method="post">
+                    
+
+                    <form action="remove_from_cart.php" method="post">
                     <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                    
                     <button type="submit">Убрать</button>
                 </form>
             </div>

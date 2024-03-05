@@ -8,6 +8,12 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
+// Генерация случайного числа для капчи
+$captcha = rand(1000, 9999);
+
+// Сохранение капчи в сессии
+$_SESSION['captcha'] = $captcha;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -266,14 +272,22 @@ if (isset($_SESSION['user_id'])) {
         echo "<p>{$_SESSION['message']}</p>";
         unset($_SESSION['message']);
     }
-    ?>
+    
+
+?>
             <h2>Авторизация</h2>
             <form action="login.php" method="post">
                 <label for="auth-email">Email:</label>
                 <input type="email" id="auth-email" name="email" required>
                 <label for="auth-password">Пароль:</label>
                 <input type="password" id="auth-password" name="password" required>
+                <div class="form-group">
+                    <label for="captcha">Капча:</label>
+                    <input type="text" class="form-control" id="captcha" name="captcha" required>
+                    <p>Введите число: <?php echo $captcha; ?></p> <!-- Отображение капчи -->
+                </div>
                 <button type="submit">Войти</button>
+                
                 
             </form>
             <div class="switch-form">

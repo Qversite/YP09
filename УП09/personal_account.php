@@ -362,7 +362,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
             border-radius: 5px; /* Скругление углов */
             transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
         }
-
+        .schange-button{
+            background-color: #21a0d1; 
+            color: white; /* Белый текст */
+            padding: 10px 20px; /* Внутренние отступы */
+            text-align: center; /* Выравнивание текста по центру */
+            text-decoration: none; /* Удаление подчеркивания */
+            display: inline-block; /* Отображение кнопки в строке с другими элементами */
+            font-size: 16px; /* Размер шрифта */
+            margin: 4px 2px; /* Внешние отступы */
+            cursor: pointer; /* Изменение курсора при наведении */
+            border: none; /* Удаление границ */
+            border-radius: 5px; /* Скругление углов */
+            transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+        }
         .logout-button:hover {
             background-color: #da190b; /* Темно-красный цвет фона при наведении */
 
@@ -470,7 +483,10 @@ input {
        
         
         <!-- Форма для смены пароля -->
-      
+        </form>
+            <form id="orderHistoryForm" action="order_history.php" method="post">
+            <button type="submit" class="schange-button">История заказов</button>
+</form>
         <h2 >Сменить пароль</h2>
         <form action="change_password.php" method="post">
             <label for="old_password">Старый пароль:</label>
@@ -480,13 +496,13 @@ input {
             <label for="confirm_password">Подтвердите пароль:</label>
             <input type="password" id="confirm_password" name="confirm_password" required><br>
             <button type="submit" name="change_password" class="change-button">Сменить пароль</button>
-        </form>
+      </form>
  </div>
-        <!-- Форма для выхода из аккаунта -->
-        <form action="logout.php" method="post">
+  <!-- Форма для выхода из аккаунта -->
+  <form action="logout.php" method="post">
             <button type="submit" name="logout" class="logout-button">Выйти из аккаунта</button>
         </form>
-            </form>
+            
             <div class="switch-form">
             </div>
         </div>
